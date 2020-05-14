@@ -1,0 +1,249 @@
+swagger: '2.0'
+info:
+  title: Adhoc Bill Amount
+  x-ibm-name: bill-amount
+  version: v1
+  description: ''
+  x-ibm-summary: ''
+schemes:
+  - https
+basePath: /alinma/dev/retail/bills
+produces:
+  - application/json
+consumes:
+  - application/json
+security:
+  - clientIdHeader: []
+    clientsecretkey: []
+securityDefinitions:
+  clientsecretkey:
+    type: apiKey
+    description: ''
+    in: header
+    name: X-IBM-Client-Secret
+  clientIdHeader:
+    type: apiKey
+    in: header
+    name: X-IBM-Client-Id
+x-ibm-configuration:
+  phase: realized
+  testable: true
+  enforced: true
+  type: rest
+  gateway: datapower-api-gateway
+  cors:
+    enabled: true
+  servers:
+    - url: 'https://apigatewaydev.alinma.internal/alinma/dev/retail/bills'
+      description: ''
+      type:
+        - Production
+        - Development
+tags: []
+definitions:
+  400BadRequest:
+    description: ''
+    type: object
+    properties:
+      httpCode:
+        type: string
+      httpMessage:
+        type: string
+      moreInformation:
+        type: string
+    example:
+      httpCode: '400'
+      httpMessage: Bad Request
+      moreInformation: 'The body of the request, which was expected to be JSON, was invalid, and could not be decoded. The object syntax was invalid.'
+  401Unauthorized:
+    description: ''
+    type: object
+    properties:
+      httpCode:
+        type: string
+      httpMessage:
+        type: string
+      moreInformation:
+        type: string
+    example:
+      httpCode: '401'
+      httpMessage: Unauthorized
+      moreInformation: Invalid client id or secret.
+  404Notfound:
+    description: ''
+    type: object
+    properties:
+      httpCode:
+        type: string
+      httpMessage:
+        type: string
+      moreInformation:
+        type: string
+    example:
+      httpCode: '404'
+      httpMessage: Not Found
+      moreInformation: No resources match requested URI
+  405MethodNotallowed:
+    description: ''
+    type: object
+    properties:
+      httpCode:
+        type: string
+      httpMessage:
+        type: string
+      moreInformation:
+        type: string
+    example:
+      httpCode: '405'
+      httpMessage: Method Not Allowed
+      moreInformation: The method is not allowed for the requested URL
+  429TooManyRequests:
+    description: ''
+    type: object
+    properties:
+      httpCode:
+        type: string
+      httpMessage:
+        type: string
+      moreInformation:
+        type: string
+    example:
+      httpCode: '429'
+      httpMessage: Too Many Requests
+      moreInformation: Rate Limit exceeded
+  500InternalServererror:
+    description: ''
+    type: object
+    properties:
+      httpCode:
+        type: string
+      httpMessage:
+        type: string
+      moreInformation:
+        type: string
+    example:
+      httpCode: '500'
+      httpMessage: Internal Server error
+      moreInformation: Unexpected error occurred
+  503ServiceUnavailable:
+    description: ''
+    type: object
+    properties:
+      httpCode:
+        type: string
+      httpMessage:
+        type: string
+      moreInformation:
+        type: string
+    example:
+      httpCode: '503'
+      httpMessage: Service Unavailable
+      moreInformation: The parameters were valid but the request failed.
+  BillAmountResponse:
+    description: ''
+    type: object
+    properties:
+      BillAmountRs:
+        type: object
+        properties:
+          StatusCode:
+            type: string
+          StatusDesc:
+            type: string
+          billDetailsSuccess:
+            type: boolean
+          showAmountGroup:
+            type: boolean
+          amountDueInfo:
+            type: number
+            format: double
+          dueDate:
+            type: string
+            format: date
+          Amount:
+            type: number
+            format: double
+          AmountHint:
+            type: string
+          minimumAmount:
+            type: number
+            format: double
+          maximumAmount:
+            type: number
+            format: double
+          AmountLOV:
+            type: string
+    example:
+      BillAmountRs:
+        StatusCode: ''
+        StatusDesc: ''
+        billDetailsSuccess: ''
+        showAmountGroup: ''
+        amountDueInfo: ''
+        dueDate: ''
+        Amount: ''
+        AmountHint: ''
+        minimumAmount: ''
+        maximumAmount: ''
+        AmountLOV: ''
+paths:
+  /v1/adhoc/billers/{biller-id}/accounts/{account-number}/bills/amount:
+    get:
+      responses:
+        '200':
+          description: 200 OK
+          schema:
+            $ref: '#/definitions/BillAmountResponse'
+        '400':
+          description: 400 BadRequest
+          schema:
+            $ref: '#/definitions/400BadRequest'
+        '401':
+          description: 401 Unauthorized
+          schema:
+            $ref: '#/definitions/401Unauthorized'
+        '404':
+          description: 404 Not Found
+          schema:
+            $ref: '#/definitions/404Notfound'
+        '405':
+          description: 405MethodNotallowed
+          schema:
+            $ref: '#/definitions/405MethodNotallowed'
+        '429':
+          description: 429Too Many Requests
+          schema:
+            $ref: '#/definitions/429TooManyRequests'
+        '500':
+          description: 500 Internal Server error
+          schema:
+            $ref: '#/definitions/500InternalServererror'
+        '503':
+          description: 503 Service Unavailable
+          schema:
+            $ref: '#/definitions/503ServiceUnavailable'
+      parameters:
+        - name: customer_language_preference
+          in: header
+          required: true
+          type: string
+        - name: Authorization
+          in: header
+          required: true
+          type: string
+        - name: biller-id
+          in: path
+          required: true
+          type: string
+        - name: account-number
+          in: path
+          required: true
+          type: string
+        - name: service-payment-type-value
+          in: query
+          required: true
+          type: string
+      consumes: []
+      produces: []
+    parameters: []
+host: apigatewaydev.alinma.internal
