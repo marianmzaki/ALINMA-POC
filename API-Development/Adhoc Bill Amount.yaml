@@ -1,8 +1,8 @@
 swagger: '2.0'
 info:
   title: Adhoc Bill Amount
-  x-ibm-name: bill-amount
-  version: v1
+  x-ibm-name: adhoc-bill-amount
+  version: v1.1
   description: ''
   x-ibm-summary: ''
 schemes:
@@ -219,7 +219,14 @@ definitions:
             type: number
             format: double
           amountLOV:
-            type: string
+            type: array
+            items:
+                type: object
+                properties:
+                    code: 
+                        type: string
+                    desc:
+                        type: string                    
     example:
       adhocBillAmountRs:
         statusCode: ''
@@ -232,7 +239,11 @@ definitions:
         amountHint: ''
         minimumAmount: ''
         maximumAmount: ''
-        amountLOV: ''
+        amountLOV: 
+        - code: ''
+          desc: ''
+        - code: ''
+          desc: ''
 paths:
   /v1/adhoc/billers/{biller-id}/accounts/{account-number}/bills/amount:
     get:
