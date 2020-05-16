@@ -229,7 +229,7 @@ definitions:
                 type: string
                 enum:
                 - token
-                - mobileSms
+                - smsToken
           invoicesList:
             type: array
             required:
