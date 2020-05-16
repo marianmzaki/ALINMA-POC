@@ -1,0 +1,697 @@
+---
+swagger: "2.0"
+info:
+  title: Sadad Invoices Hub
+  x-ibm-name: sadad-invoices-hub
+  version: v1
+  description: ""
+schemes:
+- https
+basePath: /retail/bills
+produces:
+- application/json
+consumes:
+- application/json
+security:
+- clientIdHeader: []
+  clientsecretkey: []
+securityDefinitions:
+  clientsecretkey:
+    type: apiKey
+    description: ""
+    in: header
+    name: X-IBM-Client-Secret
+  clientIdHeader:
+    type: apiKey
+    in: header
+    name: X-IBM-Client-Id
+x-ibm-configuration:
+  phase: realized
+  testable: true
+  enforced: true
+tags: []
+definitions:
+  400BadRequest:
+    description: ""
+    type: object
+    properties:
+      httpCode:
+        type: string
+      httpMessage:
+        type: string
+      moreInformation:
+        type: string
+    example:
+      httpCode: "400"
+      httpMessage: Bad Request
+      moreInformation: The body of the request, which was expected to be JSON, was
+        invalid, and could not be decoded. The object syntax was invalid.
+  401Unauthorized:
+    description: ""
+    type: object
+    properties:
+      httpCode:
+        type: string
+      httpMessage:
+        type: string
+      moreInformation:
+        type: string
+    example:
+      httpCode: "401"
+      httpMessage: Unauthorized
+      moreInformation: Invalid client id or secret.
+  404Notfound:
+    description: ""
+    type: object
+    properties:
+      httpCode:
+        type: string
+      httpMessage:
+        type: string
+      moreInformation:
+        type: string
+    example:
+      httpCode: "404"
+      httpMessage: Not Found
+      moreInformation: No resources match requested URI
+  405MethodNotallowed:
+    description: ""
+    type: object
+    properties:
+      httpCode:
+        type: string
+      httpMessage:
+        type: string
+      moreInformation:
+        type: string
+    example:
+      httpCode: "405"
+      httpMessage: Method Not Allowed
+      moreInformation: The method is not allowed for the requested URL
+  429TooManyRequests:
+    description: ""
+    type: object
+    properties:
+      httpCode:
+        type: string
+      httpMessage:
+        type: string
+      moreInformation:
+        type: string
+    example:
+      httpCode: "429"
+      httpMessage: Too Many Requests
+      moreInformation: Rate Limit exceeded
+  500InternalServererror:
+    description: ""
+    type: object
+    properties:
+      httpCode:
+        type: string
+      httpMessage:
+        type: string
+      moreInformation:
+        type: string
+    example:
+      httpCode: "500"
+      httpMessage: Internal Server error
+      moreInformation: Unexpected error occurred
+  503ServiceUnavailable:
+    description: ""
+    type: object
+    properties:
+      httpCode:
+        type: string
+      httpMessage:
+        type: string
+      moreInformation:
+        type: string
+    example:
+      httpCode: "503"
+      httpMessage: Service Unavailable
+      moreInformation: The parameters were valid but the request failed.
+  sadadInvoicesResponse:
+    description: ''
+    type: object
+    properties:
+      sadadInvoicesRs:
+        type: object
+        properties:
+          statusCode:
+            type: string
+          statusDesc:
+            type: string
+          recCtrlOut:
+            type: object
+            properties:
+              matchedRecs:
+                type: integer
+                format: int32
+              sentRecs:
+                type: integer
+                format: int32
+          invoicesList:
+            type: array
+            items: 
+                properties:
+                  sadadBillId:
+                    type: string
+                  invoiceNumber:
+                    type: string
+                  supplierName:
+                    type: string
+                  supplierId:
+                    type: string
+                  dueAmount:
+                    type: number
+                    format: double
+                  dueAmountCurrency:
+                    type: string
+                  dueAmountCurrencyDesc:
+                    type: string
+                  dueDate:
+                    type: string
+                    format: date
+                  invoiceCategory:
+                    type: string
+                  amount:
+                    type: number
+                    format: double
+                  invoiceStatus:
+                    type: string
+    example:
+      sadadInvoicesRs:
+        statusCode: I000000
+        statusDesc: success
+        recCtrlOut:
+          matchedRecs: '2'
+          sentRecs: '2'
+        invoicesList:
+        - sadadBillId: '896772697889'
+          invoiceNumber: INV_partialpay_03
+          supplierName: ''
+          supplierId: ''
+          dueAmount: 465
+          dueAmountCurrency: ''
+          dueAmountCurrencyDesc: ''
+          dueDate: ''
+          invoiceCategory: ''
+          amount: 325
+          invoiceStatus: ''
+        - sadadBillId: '896772697889'
+          invoiceNumber: INV_partialpay_03
+          supplierName: ''
+          supplierId: ''
+          dueAmount: 465
+          dueAmountCurrency: ''
+          dueAmountCurrencyDesc: ''
+          dueDate: ''
+          invoiceCategory: ''
+          amount: 325
+          invoiceStatus: ''
+  paySadadInvoicesRequest:
+    description: ''
+    type: object
+    properties:
+      paySadadInvoicesRq:
+        type: object
+        required:
+         - accountNumber
+        properties:
+          accountNumber:
+            type: string
+          secondLevelAuthentication:
+            type: object
+            properties:
+              info:
+                type: string
+              infoType:
+                type: string
+                enum:
+                - token
+                - mobileSms
+          invoicesList:
+            type: array
+            required:
+              - sadadBillId
+              - amount
+            items:
+              properties:
+                sadadBillId:
+                  type: string
+                amount:
+                  type: number
+                  format: double
+              type: object
+    example:
+      paySadadInvoicesRq:
+        accountNumber: ''
+        secondLevelAuthentication:
+          info: ''
+          infoType: ''
+        invoicesList:
+          - sadadBillId: ''
+            amount: 234234
+          - sadadBillId: ''
+            amount: 3423
+  paySadadInvoicesResponse:
+    description: ''
+    type: object
+    properties:
+      paySadadInvoicesRs:
+        type: object
+        properties:
+          statusCode:
+            type: string
+          statusDesc:
+            type: string
+          transactionIndex:
+            type: string
+          invoicesList:
+            type: array
+            items:
+              properties:
+                sadadBillId:
+                  type: string
+                statusCode:
+                  type: string
+                statusDesc:
+                  type: string
+              type: object
+    example:
+      paySadadInvoicesRs:
+        statusCode: I000000
+        statusDesc: success
+        transactionIndex: ''
+        invoicesList:
+          - sadadBillId: ''
+            statusCode: I000000
+            statusDesc: success
+          - sadadBillId: ''
+            statusCode: I000000
+            statusDesc: success
+  paySadadInvoicesReportResponse:
+    description: ''
+    type: object
+    properties:
+      statusCode:
+        type: string
+      statusDesc:
+        type: string
+      report:
+        type: string
+    example:
+      statusCode: I000000
+      statusDesc: success
+      report: ''
+  paySadadInvoicesEmailReportResponse:
+    description: ''
+    type: object
+    properties:
+      statusCode:
+        type: string
+      statusDesc:
+        type: string
+    example:
+      statusCode: I000000
+      statusDesc: success
+  paySadadInvoicesEmailReportRequest:
+    description: ''
+    type: object
+    properties:
+      alternativeEmail:
+        type: string
+    example:
+      alternativeEmail: ""
+paths:
+  /v1/sadad-invoices-hub/invoices:
+    get:
+      responses:
+        200:
+          description: 200 OK
+          schema:
+            $ref: '#/definitions/sadadInvoicesResponse'
+        400:
+          description: 400 BadRequest
+          schema:
+            $ref: '#/definitions/400BadRequest'
+        401:
+          description: 401 Unauthorized
+          schema:
+            $ref: '#/definitions/401Unauthorized'
+        404:
+          description: 404 Not Found
+          schema:
+            $ref: '#/definitions/404Notfound'
+        405:
+          description: 405MethodNotallowed
+          schema:
+            $ref: '#/definitions/405MethodNotallowed'
+        429:
+          description: 429Too Many Requests
+          schema:
+            $ref: '#/definitions/429TooManyRequests'
+        500:
+          description: 500 Internal Server error
+          schema:
+            $ref: '#/definitions/500InternalServererror'
+        503:
+          description: 503 Service Unavailable
+          schema:
+            $ref: '#/definitions/503ServiceUnavailable'
+      parameters:
+      - name: Accept-Language
+        in: header
+        required: true
+        type: string
+      - name: Authorization
+        in: header
+        required: true
+        type: string
+      - name: payer-id
+        in: query
+        required: false
+        type: integer
+        format: int64
+        maxLength: 30
+      - name: supplier-name
+        in: query
+        required: false
+        type: string
+      - name: from-amount
+        in: query
+        required: false
+        type: number
+        format: double
+      - name: to-amount
+        in: query
+        required: false
+        type: number
+        format: double
+      - name: from-date
+        in: query
+        required: true
+        type: string
+        format: date
+      - name: to-date
+        in: query
+        required: true
+        type: string
+        format: date
+      - name: max-records
+        in: query
+        required: false
+        type: integer
+        format: int32
+      - name: offset
+        in: query
+        required: false
+        type: integer
+        format: int32
+      consumes: []
+      produces: []
+    parameters: []
+  /v1/sadad-invoices-hub/invoices/{sadad-bill-id}:
+    get:
+      responses:
+        200:
+          description: 200 OK
+          schema:
+            $ref: '#/definitions/sadadInvoicesResponse'
+        400:
+          description: 400 BadRequest
+          schema:
+            $ref: '#/definitions/400BadRequest'
+        401:
+          description: 401 Unauthorized
+          schema:
+            $ref: '#/definitions/401Unauthorized'
+        404:
+          description: 404 Not Found
+          schema:
+            $ref: '#/definitions/404Notfound'
+        405:
+          description: 405MethodNotallowed
+          schema:
+            $ref: '#/definitions/405MethodNotallowed'
+        429:
+          description: 429Too Many Requests
+          schema:
+            $ref: '#/definitions/429TooManyRequests'
+        500:
+          description: 500 Internal Server error
+          schema:
+            $ref: '#/definitions/500InternalServererror'
+        503:
+          description: 503 Service Unavailable
+          schema:
+            $ref: '#/definitions/503ServiceUnavailable'
+      parameters:
+      - name: Accept-Language
+        in: header
+        required: true
+        type: string
+      - name: Authorization
+        in: header
+        required: true
+        type: string
+      - name: sadad-bill-id
+        in: path
+        required: true
+        type: string
+      consumes: []
+      produces: []
+    parameters: []
+  /v1/sadad-invoices-hub/pay-sadad-invoices/{sadad-bill-id}:
+    post:
+      responses:
+        200:
+          description: 200 OK
+          schema:
+            $ref: '#/definitions/paySadadInvoicesResponse'
+        400:
+          description: 400 BadRequest
+          schema:
+            $ref: '#/definitions/400BadRequest'
+        401:
+          description: 401 Unauthorized
+          schema:
+            $ref: '#/definitions/401Unauthorized'
+        404:
+          description: 404 Not Found
+          schema:
+            $ref: '#/definitions/404Notfound'
+        405:
+          description: 405MethodNotallowed
+          schema:
+            $ref: '#/definitions/405MethodNotallowed'
+        429:
+          description: 429Too Many Requests
+          schema:
+            $ref: '#/definitions/429TooManyRequests'
+        500:
+          description: 500 Internal Server error
+          schema:
+            $ref: '#/definitions/500InternalServererror'
+        503:
+          description: 503 Service Unavailable
+          schema:
+            $ref: '#/definitions/503ServiceUnavailable'
+      parameters:
+      - name: Accept-Language
+        in: header
+        required: true
+        type: string
+      - name: Authorization
+        in: header
+        required: true
+        type: string
+      - name: sadad-bill-id
+        in: path
+        required: true
+        type: string
+      - name: Request_body
+        required: true
+        in: body
+        schema:
+          $ref: '#/definitions/paySadadInvoicesRequest'
+      consumes: []
+      produces: []
+    parameters: []
+  /v1/sadad-invoices-hub/pay-sadad-invoices:
+    post:
+      responses:
+        200:
+          description: 200 OK
+          schema:
+            $ref: '#/definitions/paySadadInvoicesResponse'
+        400:
+          description: 400 BadRequest
+          schema:
+            $ref: '#/definitions/400BadRequest'
+        401:
+          description: 401 Unauthorized
+          schema:
+            $ref: '#/definitions/401Unauthorized'
+        404:
+          description: 404 Not Found
+          schema:
+            $ref: '#/definitions/404Notfound'
+        405:
+          description: 405MethodNotallowed
+          schema:
+            $ref: '#/definitions/405MethodNotallowed'
+        429:
+          description: 429Too Many Requests
+          schema:
+            $ref: '#/definitions/429TooManyRequests'
+        500:
+          description: 500 Internal Server error
+          schema:
+            $ref: '#/definitions/500InternalServererror'
+        503:
+          description: 503 Service Unavailable
+          schema:
+            $ref: '#/definitions/503ServiceUnavailable'
+      parameters:
+      - name: Accept-Language
+        in: header
+        required: true
+        type: string
+      - name: Authorization
+        in: header
+        required: true
+        type: string
+      - name: Request_body
+        required: true
+        in: body
+        schema:
+          $ref: '#/definitions/paySadadInvoicesRequest'
+      consumes: []
+      produces: []
+    parameters: []
+  /v1/sadad-invoices-hub/pay-sadad-invoices/{transaction-index}/report/{extension}:
+    get:
+      responses:
+        200:
+          description: 200 OK
+          schema:
+            $ref: '#/definitions/paySadadInvoicesReportResponse'
+        400:
+          description: 400 BadRequest
+          schema:
+            $ref: '#/definitions/400BadRequest'
+        401:
+          description: 401 Unauthorized
+          schema:
+            $ref: '#/definitions/401Unauthorized'
+        404:
+          description: 404 Not Found
+          schema:
+            $ref: '#/definitions/404Notfound'
+        405:
+          description: 405MethodNotallowed
+          schema:
+            $ref: '#/definitions/405MethodNotallowed'
+        429:
+          description: 429Too Many Requests
+          schema:
+            $ref: '#/definitions/429TooManyRequests'
+        500:
+          description: 500 Internal Server error
+          schema:
+            $ref: '#/definitions/500InternalServererror'
+        503:
+          description: 503 Service Unavailable
+          schema:
+            $ref: '#/definitions/503ServiceUnavailable'
+      parameters:
+      - name: Accept-Language
+        in: header
+        required: true
+        type: string
+      - name: Authorization
+        in: header
+        required: true
+        type: string
+      - name: transaction-index
+        in: path
+        required: true
+        type: string
+      - name: extension
+        in: path
+        required: true
+        type: string
+        enum:
+         - pdf
+         - xlsx
+         - csv
+         - docx
+      consumes: []
+      produces: []
+    parameters: []
+  /v1/sadad-invoices-hub/pay-sadad-invoices/{transaction-index}/email-report/{extension}:
+    post:
+      responses:
+        200:
+          description: 200 OK
+          schema:
+            $ref: '#/definitions/paySadadInvoicesEmailReportResponse'
+        400:
+          description: 400 BadRequest
+          schema:
+            $ref: '#/definitions/400BadRequest'
+        401:
+          description: 401 Unauthorized
+          schema:
+            $ref: '#/definitions/401Unauthorized'
+        404:
+          description: 404 Not Found
+          schema:
+            $ref: '#/definitions/404Notfound'
+        405:
+          description: 405MethodNotallowed
+          schema:
+            $ref: '#/definitions/405MethodNotallowed'
+        429:
+          description: 429Too Many Requests
+          schema:
+            $ref: '#/definitions/429TooManyRequests'
+        500:
+          description: 500 Internal Server error
+          schema:
+            $ref: '#/definitions/500InternalServererror'
+        503:
+          description: 503 Service Unavailable
+          schema:
+            $ref: '#/definitions/503ServiceUnavailable'
+      parameters:
+      - name: Accept-Language
+        in: header
+        required: true
+        type: string
+      - name: Authorization
+        in: header
+        required: true
+        type: string
+      - name: transaction-index
+        in: path
+        required: true
+        type: string
+      - name: extension
+        in: path
+        required: true
+        type: string
+        enum:
+         - pdf
+         - xlsx
+         - csv
+         - docx
+      - name: Request_body
+        required: true
+        in: body
+        schema:
+          $ref: '#/definitions/paySadadInvoicesEmailReportRequest'
+      consumes: []
+      produces: []
+    parameters: []
